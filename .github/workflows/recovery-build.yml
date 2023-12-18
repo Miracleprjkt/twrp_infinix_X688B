@@ -14,7 +14,7 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/Miracleprjkt/twrp_infinix_X688'
+        default: 'https://github.com/Miracleprjkt/twrp_infinix_X688B'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
