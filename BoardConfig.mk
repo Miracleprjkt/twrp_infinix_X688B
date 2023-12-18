@@ -32,11 +32,15 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := generic
 
-# Kernel
-BOARD_KERNEL_CMDLINE := \
-	bootopt=64S3,32N2,64N2 \
-	androidboot.selinux=permissive
+# Bootloader
+TARGET_BOARD_PLATFORM := mt6765
+TARGET_BOOTLOADER_BOARD_NAME := mt6765
 
+# Assert
+TARGET_OTA_ASSERT_DEVICE := X688B
+
+# Kernel
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 androidboot.selinux=permissive
 BOARD_INCLUDE_RECOVERY_DTBO := true
 BOARD_BOOTIMG_HEADER_VERSION := 2
 BOARD_KERNEL_BASE := 0x40078000
@@ -76,26 +80,40 @@ BOARD_SUPER_PARTITION_GROUPS := main
 BOARD_MAIN_SIZE := 9126805504
 BOARD_MAIN_PARTITION_LIST := \
 	system \
+        system_ext \
 	vendor \
 	product
 
-# System as Root
+# System Root System as root
 BOARD_SUPPRESS_SECURE_ERASE := true
+
+# Recovery
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/system/etc/recovery.fstab
+
+# Additional binaries & libraries needed for recovery
+TARGET_RECOVERY_DEVICE_MODULES += \
+    libkeymaster4 \
+    libpuresoftkeymasterdevice 
+
+TW_RECOVERY_ADDITIONAL_RELINK_LIBRARY_FILES += \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libkeymaster4.so \
+    $(TARGET_OUT_SHARED_LIBRARIES)/libpuresoftkeymasterdevice.so
 
 # Platform
 TARGET_BOARD_PLATFORM := mt6765
 
-# Android Verified Boot
+# Verified Boot
 BOARD_AVB_ENABLE := true
-BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA2048
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
-BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 2
 
 # Crypto
 TW_INCLUDE_CRYPTO := true
 TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
 
 # Encryption
 PLATFORM_SECURITY_PATCH := 2099-12-31
@@ -105,6 +123,8 @@ PLATFORM_VERSION := 20.1.0
 # TWRP Configuration
 TW_THEME := portrait_hdpi
 TW_EXTRA_LANGUAGES := true
+RECOVERY_SDCARD_ON_DATA := true
+TW_INCLUDE_NTFS_3G := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_USE_TOOLBOX := true
@@ -116,3 +136,6 @@ TW_MAX_BRIGHTNESS := 2047
 # Debug
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
+
+#Maintainer
+TW_DEVICE_VERSION= Miraclev1
